@@ -19,7 +19,7 @@ Incluye un **frontend** en JavaScript y un **backend RESTful en .NET**, con func
 - SQL Server
 - DTOs y Servicios para manejo de la lógica
 
-  ### **Servicios externos**
+### **Servicios externos**
 - Cloudinary para almacenar las imágenes de las películas
 
 ---
