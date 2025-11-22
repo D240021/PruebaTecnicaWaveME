@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prueba WaveME</title>
+    <link rel="stylesheet" href="/estilos/estilos.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <a href="/">Prueba WaveME</a>
+          </li>
+          <li>
+            <a href="paginas/Crear.html">Crear película</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <h1>Listado de películas</h1>
+      <div id="filtrosPeliculas">
+        <input
+          type="text"
+          id="filtroTitulo"
+          placeholder="Buscar por nombre..."
+        />
+        <button id="btnBuscarFiltro">Buscar</button>
+      </div>
+      <div class="movieList"></div>
+    </main>
+
+    <script type="module" src="/js/index.js"></script>
+    <script type="module" src="/servicios/api.js"></script>
+    <script type="module" src="/servicios/cloudinary.js"></script>
+    <script type="module" src="/utils/funciones.js"></script>
+  </body>
+</html>

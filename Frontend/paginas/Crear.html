@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crear Película</title>
+    <link rel="stylesheet" href="/estilos/estilos.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="/">Prueba WaveME</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="mainCrear">
+      <h2>Crear Película</h2>
+      <form id="crearPeliculaForm">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required />
+
+        <label for="imagen">Imagen</label>
+        <input
+          type="file"
+          id="imagen"
+          name="imagen"
+          accept="image/*"
+          required
+        />
+
+        <label for="descripcion">Descripción</label>
+        <textarea
+          id="descripcion"
+          name="descripcion"
+          rows="4"
+          required
+        ></textarea>
+
+        <label for="fechaSalida">Fecha de salida</label>
+        <input type="date" id="fechaSalida" name="fechaSalida" required />
+
+        <button type="submit" id="btnCrearPelicula">Crear Película</button>
+      </form>
+
+      <div id="mensaje"></div>
+    </main>
+
+    <script type="module" src="/js/crear.js"></script>
+    <script type="module" src="../utils/constantes.js"></script>
+    <script type="module" src="../utils/funciones.js"></script>
+  </body>
+</html>
