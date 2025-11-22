@@ -1,4 +1,5 @@
-﻿using Datos.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using Datos.Interfaces;
 using Dominio;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,9 +32,9 @@ namespace PruebaTecnicaWaveME.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PeliculaLecturaDTO>>> ObtenerTodos()
+        public async Task<ActionResult<IEnumerable<PeliculaLecturaDTO>>> ObtenerTodos( [FromQuery] [Required] bool ocultarDesactivados)
         {
-            IEnumerable<Pelicula> peliculasBD = await  this.peliculaServicio.ObtenerTodos();
+            IEnumerable<Pelicula> peliculasBD = await  this.peliculaServicio.ObtenerTodos(ocultarDesactivados);
 
             return StatusCode(200, PeliculaDTOMapper.ObtenerPeliculasLecturaDTODePeliculas(peliculasBD));
         }

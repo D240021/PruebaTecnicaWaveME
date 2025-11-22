@@ -1,8 +1,8 @@
 const BASE_URL = 'http://localhost:5288/pelicula';
 
-export const obtenerPeliculas = async () => {
+export const obtenerPeliculas = async (ocultarDesactivados = true) => {
   try {
-    const response = await fetch(BASE_URL, {
+    const response = await fetch(`${BASE_URL}?ocultarDesactivados=${ocultarDesactivados}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     });

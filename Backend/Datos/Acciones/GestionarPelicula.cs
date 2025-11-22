@@ -8,6 +8,7 @@ using Datos.Interfaces;
 using Datos.Modelos;
 using Dominio;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Datos.Acciones
 {
@@ -112,10 +113,16 @@ namespace Datos.Acciones
             return resultado;
         }
 
-        public async Task<IEnumerable<Pelicula>> ObtenerTodos()
+        public async Task<IEnumerable<Pelicula>> ObtenerTodos(bool ocultarDesactivados)
         {
-            return await _context.Pelicula
-                .Where(peli => peli.EsBorrado == false)
+
+            var consulta = this._context.Pelicula.AsQueryable();
+
+            if (ocultarDesactivados)
+                consulta = consulta.Where(p => p.EsBorrado == false);
+            
+
+            return await consulta
                 .Select(p => new Pelicula
                 {
                     Id = p.Id,

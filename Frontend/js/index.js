@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const campoInfo = document.querySelector(".movieList");
   const filtroInput = document.getElementById("filtroTitulo");
   const btnBuscarFiltro = document.getElementById("btnBuscarFiltro");
+  const selectOcultos = document.getElementById("campoOcultos");
 
   if (!campoInfo) return;
 
@@ -70,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * @returns {string} HTML del formulario
    */
   const generarFormularioEdicion = (pelicula) => `
-    <h2 style="margin-top: 0;">Editar Película</h2>
+    <h2 style="margin-top: 0;">Gestionar Película</h2>
     <form id="formEditarPelicula">
       <div style="margin-bottom: 15px;">
         <label style="display: block; margin-bottom: 5px; font-weight: bold;">Nombre:</label>
@@ -247,12 +248,40 @@ document.addEventListener("DOMContentLoaded", () => {
         await actualizarPelicula(peliculaActualizada);
         alert(`Película "${peliculaActualizada.nombre}" actualizada.`);
         document.body.removeChild(modalOverlay);
-        cargarPeliculas(filtroInput.value);
+        cargarPeliculas(filtroInput.value, selectOcultos.value);
       } catch (error) {
         console.error("Error actualizando película:", error);
         mostrarErrorModal(elementos.mensajeEdicion, "Error al actualizar la película.");
       }
     });
+  };
+
+  // ========================================
+  // FUNCIONES DE SPINNER
+  // ========================================
+
+  /**
+   * Muestra un spinner de carga
+   */
+  const mostrarSpinner = () => {
+    campoInfo.innerHTML = `
+      <div style="display: flex; justify-content: center; align-items: center; padding: 40px;">
+        <div style="
+          border: 4px solid #f3f3f3;
+          border-top: 4px solid #007bff;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          animation: spin 1s linear infinite;
+        "></div>
+      </div>
+      <style>
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      </style>
+    `;
   };
 
   // ========================================
@@ -334,13 +363,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnDesactivar = crearBoton("btn-desactivar", "Desactivar", async () => {
       await eliminarPeliculaLogica(pelicula.id);
       alert(`Película "${pelicula.nombre}" desactivada.`);
-      cargarPeliculas(filtroInput.value);
+      cargarPeliculas(filtroInput.value, selectOcultos.value);
     });
 
     const btnEliminar = crearBoton("btn-eliminar", "Eliminar", async () => {
       await eliminarPeliculaFisica(pelicula.id);
       alert(`Película "${pelicula.nombre}" eliminada.`);
-      cargarPeliculas(filtroInput.value);
+      cargarPeliculas(filtroInput.value, selectOcultos.value);
     });
 
     // Crear contenedor de imagen
@@ -365,12 +394,17 @@ document.addEventListener("DOMContentLoaded", () => {
   /**
    * Carga y muestra la lista de películas con filtro opcional
    * @param {string} filtro - Texto para filtrar por nombre
+   * @param {string} mostrarOculta - "true" para solo activos, "false" para todos
    */
-  const cargarPeliculas = async (filtro = "") => {
+  const cargarPeliculas = async (filtro = "", mostrarOculta = "false") => {
+    // Mostrar spinner mientras carga
+    mostrarSpinner();
     try {
-      let peliculas = await obtenerPeliculas();
-
-      // Aplicar filtro si existe
+      
+      const mostrarSoloActivos = mostrarOculta === "true";
+      let peliculas = await obtenerPeliculas(mostrarSoloActivos);
+      
+      // Aplicar filtro por nombre
       if (filtro.trim() !== "") {
         peliculas = peliculas.filter(p => 
           p.nombre.toLowerCase().includes(filtro.toLowerCase())
@@ -403,14 +437,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Búsqueda al hacer clic en el botón
   btnBuscarFiltro.addEventListener("click", () => {
-    cargarPeliculas(filtroInput.value);
+    if (filtroInput.value) {
+      cargarPeliculas(filtroInput.value, selectOcultos.value);
+    }
   });
 
   // Limpiar filtro al borrar el input
   filtroInput.addEventListener("input", () => {
     if (filtroInput.value.trim() === "") {
-      cargarPeliculas("");
+      cargarPeliculas("", selectOcultos.value);
     }
+  });
+
+  // Cambio en el select de ocultos
+  selectOcultos.addEventListener("change", () => {
+    cargarPeliculas(filtroInput.value, selectOcultos.value);
   });
 
   // ========================================

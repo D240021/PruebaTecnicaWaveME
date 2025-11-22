@@ -12,7 +12,7 @@ namespace Datos.Interfaces
 
         Task<Boolean> Agregar(Pelicula pelicula);
 
-        Task<IEnumerable<Pelicula>> ObtenerTodos();
+        Task<IEnumerable<Pelicula>> ObtenerTodos(bool ocultarDesactivados);
 
         Task<Pelicula> ObtenerPorId(int id);
 
